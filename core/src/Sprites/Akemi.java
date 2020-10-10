@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
+import dev.fong.hackathongame.Level1;
 
 import java.lang.reflect.Array;
 
@@ -19,10 +20,9 @@ public class Akemi extends Sprite {
     private float stateTimer;
     private boolean runningRight;
 
-    public Akemi(World world, PlayScreen screen){
-        super(screen.getAtlas().findingRegion("akemi"));
+    public Akemi(World world, Level1 level){
+        super(level.getAtlas().findRegion("Akemi"));//sprite map for akemi
         this.world = world;
-        defineAkemi();
         currentState = State.STANDING;
         previousState = State.STANDING;
         stateTimer = 0;
@@ -48,13 +48,13 @@ public class Akemi extends Sprite {
 
     public void defineAkemi(){
         BodyDef bdef = new BodyDef();
-        bdef.position.set(32, 32);
+        bdef.position.set(32 / Akemi.PPM, 32 / Akemi.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody (bdef);
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(5);
+        shape.setRadius(5 / Akemi.PPM);
 
         fdef.shape = shape;
         b2body.createFixture(fdef);

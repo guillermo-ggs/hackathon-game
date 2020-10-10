@@ -24,9 +24,9 @@ public class Level1 extends ScreenAdapter {
     private OrthogonalTiledMapRenderer renderer;
 
     public Level1(MainGame game) {
-        atlas = new TextureAtlas("Akemi.pack");
+        //atlas = new TextureAtlas("Akemi.pack");
         this.game = game;
-        texture = new Texture("GohanCalvo.jpg");
+        //texture = new Texture("GohanCalvo.jpg");
         gamecam = new OrthographicCamera();
         gamePort = new FitViewport(480, 208, gamecam);
 

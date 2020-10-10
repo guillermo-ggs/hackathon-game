@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 import dev.fong.hackathongame.Level1;
+import dev.fong.hackathongame.MainGame;
 
 import java.lang.reflect.Array;
 
@@ -15,8 +16,8 @@ public class Akemi extends Sprite {
     public World world;
     public Body b2body;
     private TextureRegion akemiStand;
-    private Animation akemiRun;
-    private Animation akemiJump;
+    private Animation<TextureRegion> akemiRun;
+    private Animation<TextureRegion> akemiJump;
     private float stateTimer;
     private boolean runningRight;
 
@@ -28,33 +29,33 @@ public class Akemi extends Sprite {
         stateTimer = 0;
         runningRight = true;
 
-        Array<TextureRegion> frames = new Array<TextureRegion>();
+        com.badlogic.gdx.utils.Array<TextureRegion> frames = new com.badlogic.gdx.utils.Array<>();
 
         for(int i = 1; i < 4; i++)
-            frames.add(new TextureRegion(getTexture()), i * 16, 0, 16, 16);
-        akemiRun = new Animation(0.1f, frames);
+            frames.add(new TextureRegion(getTexture(), i* 16, 0, 16, 16));
+        akemiRun = new Animation<>(0.1f, frames);
         frames.clear();
 
         for( int i = 4; i < 6; i++)
-            frames.add(new TextureRegion(getTexture()), i * 16, 0, 16, 16);
-        akemiJump = new Animation(0.1f, frames);
+            frames.add(new TextureRegion(getTexture(), i * 16, 0, 16, 16));
+        akemiJump = new Animation <>(0.1f, frames);
 
         akemiStand = new TextureRegion(getTexture(), 0, 0, 16, 16);
 
         defineAkemi();
-        setBounds(0, 0, 16 / Akemi.PPM, 16 / Akemi.PPM);
+        setBounds(0, 0, 16 / MainGame.PPM, 16 / MainGame.PPM);
         setRegion(akemiStand);
     }
 
     public void defineAkemi(){
         BodyDef bdef = new BodyDef();
-        bdef.position.set(32 / Akemi.PPM, 32 / Akemi.PPM);
+        bdef.position.set(32 / MainGame.PPM, 32 / MainGame.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody (bdef);
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(5 / Akemi.PPM);
+        shape.setRadius(10 / MainGame.PPM);
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
@@ -70,7 +71,7 @@ public class Akemi extends Sprite {
         TextureRegion region;
         switch (currentState){
             case JUMPING:
-                region = akemiJump.getKeyFrame(stateTimer);
+                region = (TextureRegion) akemiJump.getKeyFrame(stateTimer);
                 break;
             case RUNNING:
                 region = (TextureRegion) akemiRun.getKeyFrame(stateTimer);

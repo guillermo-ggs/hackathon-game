@@ -10,6 +10,8 @@ public class MainGame extends Game {
 	ShapeRenderer shapeRenderer;
 	BitmapFont font;
 
+	public static final int PPM = 100;
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();

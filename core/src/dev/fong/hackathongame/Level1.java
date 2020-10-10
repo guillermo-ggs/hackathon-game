@@ -24,22 +24,23 @@ public class Level1 extends ScreenAdapter {
     private OrthogonalTiledMapRenderer renderer;
 
     public Level1(MainGame game) {
-        //atlas = new TextureAtlas("Akemi.pack");
+        //atlas = new TextureAtlas("textures.png");
         this.game = game;
-        //texture = new Texture("GohanCalvo.jpg");
+        texture = new Texture("textures.png");
         gamecam = new OrthographicCamera();
-        gamePort = new FitViewport(480, 208, gamecam);
+        gamePort = new FitViewport(1400, 1000, gamecam);
 
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("level1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
 
-        gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
+        gamecam.setToOrtho(false, gamePort.getWorldWidth()/2, gamePort.getWorldHeight()/2);
+        //gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
     }
 
     public void handleInput(float dt) {
-        if (Gdx.input.isTouched())
-            gamecam.position.x += 100 * dt;
+        if (Gdx.input.isTouched());
+            //gamecam.position.x += 100 * dt;
     }
 
     public void update(float dt) {

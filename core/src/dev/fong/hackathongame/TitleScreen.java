@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.Texture;
 
 
 public class TitleScreen extends ScreenAdapter {
-    private static final int BTN_WIDTH = 200;
-    private static final int BTN_HEIGHT = 100;
+    public static final int BTN_WIDTH = 200;
+    public static final int BTN_HEIGHT = 100;
 
     MainGame game;
 
@@ -44,7 +44,7 @@ public class TitleScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClearColor(0, 0.8f, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.begin();
 
@@ -54,6 +54,9 @@ public class TitleScreen extends ScreenAdapter {
 
         if(Gdx.input.getX() < x + BTN_WIDTH && Gdx.input.getX() > x && Gdx.input.getY() < y + BTN_HEIGHT && Gdx.input.getY() > y){
             game.batch.draw(exitBtnHover, x, playBtnY, BTN_WIDTH, BTN_HEIGHT);
+            if(Gdx.input.isTouched()) {
+                Gdx.app.exit();
+            }
         }
         else {
             game.batch.draw(exitBtn, x, playBtnY, BTN_WIDTH, BTN_HEIGHT);
@@ -61,6 +64,9 @@ public class TitleScreen extends ScreenAdapter {
 
         if(Gdx.input.getX() < x + BTN_WIDTH && Gdx.input.getX() > x && Gdx.input.getY() < playBtnY + BTN_HEIGHT && Gdx.input.getY() > playBtnY){
             game.batch.draw(playBtnHover, x, y, BTN_WIDTH, BTN_HEIGHT);
+            if(Gdx.input.isTouched()) {
+                game.setScreen(new LevelScreen(game));
+            }
         }
         else {
             game.batch.draw(playBtn,x, y, BTN_WIDTH, BTN_HEIGHT);

@@ -15,29 +15,24 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Level1 extends ScreenAdapter implements Screen {
     MainGame game;
     Texture texture;
     private TextureAtlas atlas;
-
-
     private OrthographicCamera gamecam;
     private Viewport gamePort;
-
     private TmxMapLoader mapLoader;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
-
     private World world;
-    //private Box2DDebugRenderer b2dr;
     private B2WorldCreator creator;
     private Akemi player;
+    private int jump_count = 0;
+    public static final int MAX_JUMP_COUNT = 2;
 
 
     public Level1(MainGame game) {
@@ -51,7 +46,7 @@ public class Level1 extends ScreenAdapter implements Screen {
         map = mapLoader.load("level1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
 
-        world = new World(new Vector2(0, -350), true);
+        world = new World(new Vector2(0, -250), true);
 
         creator = new B2WorldCreator(this);
 
@@ -63,14 +58,25 @@ public class Level1 extends ScreenAdapter implements Screen {
     }
 
     public void handleInput(float dt) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W))
-            player.b2body.applyLinearImpulse(new Vector2(0, 800f), player.b2body.getWorldCenter(), true);
+        if (player.currentState == Akemi.State.STANDING || player.currentState == Akemi.State.RUNNING) {
+            jump_count = 0;
+        }
+        if ((Gdx.input.isKeyJustPressed(Input.Keys.W) || Gdx.input.isKeyJustPressed(Input.Keys.UP)) && (jump_count < MAX_JUMP_COUNT)) {
+            player.b2body.applyLinearImpulse(new Vector2(0, 1000f), player.b2body.getWorldCenter(), true);
+            jump_count++;
+        }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.D))
-            player.b2body.applyLinearImpulse(new Vector2(4f, 0), player.b2body.getWorldCenter(), true);
+        if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+            player.b2body.applyLinearImpulse(new Vector2(500f, 0), player.b2body.getWorldCenter(), true);
 
-        if (Gdx.input.isKeyPressed(Input.Keys.A))
-            player.b2body.applyLinearImpulse(new Vector2(-4f, 0), player.b2body.getWorldCenter(), true);
+        if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT))
+            player.b2body.applyLinearImpulse(new Vector2(-500f, 0), player.b2body.getWorldCenter(), true);
+
+        if ((Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) && (Gdx.input.isKeyJustPressed(Input.Keys.W) || Gdx.input.isKeyJustPressed(Input.Keys.UP)) && (jump_count < MAX_JUMP_COUNT)) {
+            player.b2body.applyLinearImpulse(new Vector2(500f, 500f), player.b2body.getWorldCenter(), true);
+            jump_count++;
+        }
+
 
     }
 

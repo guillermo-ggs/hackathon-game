@@ -34,7 +34,7 @@ public class Level1 extends ScreenAdapter implements Screen {
     private OrthogonalTiledMapRenderer renderer;
 
     private World world;
-    private Box2DDebugRenderer b2dr;
+    //private Box2DDebugRenderer b2dr;
     private B2WorldCreator creator;
     private Akemi player;
 
@@ -51,7 +51,7 @@ public class Level1 extends ScreenAdapter implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map);
 
         world = new World(new Vector2(0, -350), true);
-        b2dr = new Box2DDebugRenderer();
+        //b2dr = new Box2DDebugRenderer();
 
         creator = new B2WorldCreator(this);
 
@@ -122,7 +122,7 @@ public class Level1 extends ScreenAdapter implements Screen {
 
         renderer.render();
 
-        b2dr.render(world, gamecam.combined);
+        //b2dr.render(world, gamecam.combined);
 
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
@@ -141,6 +141,6 @@ public class Level1 extends ScreenAdapter implements Screen {
         map.dispose();
         renderer.dispose();
         world.dispose();
-        b2dr.dispose();
+        //b2dr.dispose();
     }
 }

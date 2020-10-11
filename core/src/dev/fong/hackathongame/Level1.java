@@ -18,6 +18,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Level1 extends ScreenAdapter implements Screen {
@@ -51,7 +52,6 @@ public class Level1 extends ScreenAdapter implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map);
 
         world = new World(new Vector2(0, -350), true);
-        //b2dr = new Box2DDebugRenderer();
 
         creator = new B2WorldCreator(this);
 
@@ -83,6 +83,7 @@ public class Level1 extends ScreenAdapter implements Screen {
         handleInput(dt);
         world.step(1 / 60f, 6, 2);
         gamecam.position.x = player.b2body.getPosition().x;
+        gamecam.position.y = player.b2body.getPosition().y;
         player.update(dt);
         gamecam.update();
         renderer.setView(gamecam);
@@ -123,7 +124,6 @@ public class Level1 extends ScreenAdapter implements Screen {
         renderer.render();
 
         //b2dr.render(world, gamecam.combined);
-
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
         player.draw(game.batch);
@@ -132,7 +132,7 @@ public class Level1 extends ScreenAdapter implements Screen {
 
     @Override
     public void resize(int width, int height){
-
+        //gamePort.update(width , height);
     }
 
     @Override

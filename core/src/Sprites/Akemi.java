@@ -25,7 +25,6 @@ public class Akemi extends Sprite {
 
     public Akemi(World world, Level1 level){
         super (new Texture("akemistand.png"));
-        //super(level.getAtlas().findRegion("akemi"));//sprite map for akemi
         this.level = level;
         this.world = world;
         currentState = State.STANDING;

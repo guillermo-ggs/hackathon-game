@@ -54,7 +54,7 @@ public class Level1 extends ScreenAdapter implements Screen {
         map = mapLoader.load("level1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
 
-        world = new World(new Vector2(0, -250), true);
+        world = new World(new Vector2(0, -100), true);
 
         creator = new B2WorldCreator(this);
 
@@ -80,12 +80,10 @@ public class Level1 extends ScreenAdapter implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT))
             player.b2body.applyLinearImpulse(new Vector2(-500f, 0), player.b2body.getWorldCenter(), true);
 
-        if ((Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) && (Gdx.input.isKeyJustPressed(Input.Keys.W) || Gdx.input.isKeyJustPressed(Input.Keys.UP)) && (jump_count < MAX_JUMP_COUNT)) {
+        if ((Gdx.input.isKeyJustPressed(Input.Keys.D) || Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) && (Gdx.input.isKeyJustPressed(Input.Keys.W) || Gdx.input.isKeyJustPressed(Input.Keys.UP)) && (jump_count < MAX_JUMP_COUNT)) {
             player.b2body.applyLinearImpulse(new Vector2(500f, 500f), player.b2body.getWorldCenter(), true);
             jump_count++;
         }
-
-
     }
 
     public TiledMap getMap(){

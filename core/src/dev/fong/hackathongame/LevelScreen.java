@@ -56,7 +56,7 @@ public class LevelScreen extends ScreenAdapter {
 
         if (Gdx.input.getX() < x + TitleScreen.BTN_WIDTH && Gdx.input.getX() > x && Gdx.input.getY() < playBtnY + TitleScreen.BTN_HEIGHT && Gdx.input.getY() > playBtnY) {
             game.batch.draw(lvl1Hover, x, y, TitleScreen.BTN_WIDTH, TitleScreen.BTN_HEIGHT);
-            if(Gdx.input.isTouched()) {
+            if (Gdx.input.isTouched()) {
                 this.dispose();
                 game.setScreen(new Level1(game));
             }

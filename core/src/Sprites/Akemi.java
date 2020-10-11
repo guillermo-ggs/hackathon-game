@@ -1,14 +1,14 @@
 package Sprites;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 import dev.fong.hackathongame.Level1;
 import dev.fong.hackathongame.MainGame;
-
-import java.lang.reflect.Array;
 
 public class Akemi extends Sprite {
     public enum State { FALLING, JUMPING, STANDING, RUNNING}
@@ -21,61 +21,62 @@ public class Akemi extends Sprite {
     private Animation<TextureRegion> akemiJump;
     private float stateTimer;
     private boolean runningRight;
+    private Level1 level;
 
     public Akemi(World world, Level1 level){
-        super(level.getAtlas().findRegion("Akemi"));//sprite map for akemi
+        super (new Texture("akemi.png"));
+        //super(level.getAtlas().findRegion("akemi"));//sprite map for akemi
+        this.level = level;
         this.world = world;
         currentState = State.STANDING;
         previousState = State.STANDING;
         stateTimer = 0;
         runningRight = true;
 
-        com.badlogic.gdx.utils.Array<TextureRegion> frames = new com.badlogic.gdx.utils.Array<>();
+        Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for(int i = 1; i < 4; i++)
             frames.add(new TextureRegion(getTexture(), i* 16, 0, 16, 16));
-        akemiRun = new Animation<>(0.1f, frames);
+        akemiRun = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
 
         for( int i = 4; i < 6; i++)
             frames.add(new TextureRegion(getTexture(), i * 16, 0, 16, 16));
-        akemiJump = new Animation <>(0.1f, frames);
+        akemiJump = new Animation <TextureRegion>(0.1f, frames);
 
-        akemiStand = new TextureRegion(getTexture(), 0, 0, 16, 16);
+        akemiStand = new TextureRegion(getTexture(), 800, 475, 32, 64);
 
         defineAkemi();
-        setBounds(0, 0, 16 / MainGame.PPM, 16 / MainGame.PPM);
+        setBounds(800, 475, 32, 64);
         setRegion(akemiStand);
+    }
+
+    public void update(float dt){
+        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
     }
 
     public void defineAkemi(){
         BodyDef bdef = new BodyDef();
-        bdef.position.set(32 / MainGame.PPM, 32 / MainGame.PPM);
+        bdef.position.set(32, 32);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody (bdef);
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(10 / MainGame.PPM);
+        shape.setRadius(10);
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
 
         EdgeShape head = new EdgeShape();
-        head.set (new Vector2(-2 / MainGame.PPM, 6 / MainGame.PPM), new Vector2(2 / MainGame.PPM, 6 / MainGame.PPM));
+        head.set (new Vector2(-2, 10), new Vector2(2, 10));
         fdef.shape = head;
         fdef.isSensor = true;
 
         b2body.createFixture(fdef).setUserData("head");
 
-
-
     }
 
-    public void update(float dt){
-        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-        setRegion(getFrame(dt));
-    }
     public TextureRegion getFrame(float dt){
         currentState = getState();
 

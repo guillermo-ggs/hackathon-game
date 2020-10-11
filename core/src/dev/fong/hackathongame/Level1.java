@@ -4,6 +4,7 @@ import Sprites.Akemi;
 import Tools.B2WorldCreator;
 import Tools.WorldContactListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -31,15 +32,15 @@ public class Level1 extends ScreenAdapter {
     private OrthogonalTiledMapRenderer renderer;
     private World world;
     private Box2DDebugRenderer b2dr;
-    //private AkemiTest player;
+    private Akemi player;
 
 
     public Level1(MainGame game) {
-        //atlas = new TextureAtlas("textures.png");
+        //atlas = new TextureAtlas("textures.pack");
         this.game = game;
         texture = new Texture("textures.png");
         gamecam = new OrthographicCamera();
-        gamePort = new FitViewport(1400, 1000, gamecam);
+        gamePort = new FitViewport(MainGame.V_Width, MainGame.V_Height, gamecam);
 
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("level1.tmx");
@@ -47,13 +48,12 @@ public class Level1 extends ScreenAdapter {
 
         //gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
-       world = new World(new Vector2(0, -10), true);
-
+       world = new World(new Vector2(0, -240), true);
        b2dr = new Box2DDebugRenderer();
 
        new B2WorldCreator(world, map);
 
-       //player = new AkemiTest(world, this);
+       player = new Akemi(world, this);
 
         world.setContactListener(new WorldContactListener());
         gamecam.setToOrtho(false, gamePort.getWorldWidth()/2, gamePort.getWorldHeight()/2);
@@ -61,12 +61,20 @@ public class Level1 extends ScreenAdapter {
     }
 
     public void handleInput(float dt) {
-        if (Gdx.input.isTouched());
-            //gamecam.position.x += 100 * dt;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W));
+            player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
+        if (Gdx.input.isKeyPressed(Input.Keys.D) && player.b2body.getLinearVelocity().x <= 2);
+            player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
+        if (Gdx.input.isKeyPressed(Input.Keys.A) && player.b2body.getLinearVelocity().x >= -2);
+            player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
+
     }
 
     public void update(float dt) {
         handleInput(dt);
+        world.step(1 / 60f, 6, 2);
+        gamecam.position.x = player.b2body.getPosition().x;
+        player.update(dt);
         gamecam.update();
         renderer.setView(gamecam);
     }
@@ -88,6 +96,13 @@ public class Level1 extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         renderer.render();
+
+        b2dr.render(world, gamecam.combined);
+
+        game.batch.setProjectionMatrix(gamecam.combined);
+        game.batch.begin();
+        player.draw(game.batch);
+        game.batch.end();
     }
 
     @Override

@@ -9,7 +9,8 @@ public class MainGame extends Game {
 	SpriteBatch batch;
 	ShapeRenderer shapeRenderer;
 	BitmapFont font;
-
+	public static final int V_Width = 1600;
+	public static final int V_Height = 900;
 	public static final int PPM = 100;
 
 	@Override

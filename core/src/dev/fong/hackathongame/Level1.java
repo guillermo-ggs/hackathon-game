@@ -5,6 +5,7 @@ import Tools.B2WorldCreator;
 import Tools.WorldContactListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -19,18 +20,22 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-public class Level1 extends ScreenAdapter {
+public class Level1 extends ScreenAdapter implements Screen {
     MainGame game;
     Texture texture;
     private TextureAtlas atlas;
+
+
     private OrthographicCamera gamecam;
     private Viewport gamePort;
 
     private TmxMapLoader mapLoader;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
+
     private World world;
     private Box2DDebugRenderer b2dr;
+    private B2WorldCreator creator;
     private Akemi player;
 
 
@@ -45,12 +50,10 @@ public class Level1 extends ScreenAdapter {
         map = mapLoader.load("level1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
 
-        //gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
-
         world = new World(new Vector2(0, -350), true);
         b2dr = new Box2DDebugRenderer();
 
-        new B2WorldCreator(world, map);
+        creator = new B2WorldCreator(this);
 
         player = new Akemi(world, this);
 
@@ -60,13 +63,20 @@ public class Level1 extends ScreenAdapter {
     }
 
     public void handleInput(float dt) {
-        if (Gdx.input.isKeyPressed(Input.Keys.W));
+        if (Gdx.input.isKeyPressed(Input.Keys.W))
             player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
-        if (Gdx.input.isKeyPressed(Input.Keys.D) && player.b2body.getLinearVelocity().x <= 2);
+        if (Gdx.input.isKeyPressed(Input.Keys.D) && player.b2body.getLinearVelocity().x <= 2)
             player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
-        if (Gdx.input.isKeyPressed(Input.Keys.A) && player.b2body.getLinearVelocity().x >= -2);
+        if (Gdx.input.isKeyPressed(Input.Keys.A) && player.b2body.getLinearVelocity().x >= -2)
             player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
 
+    }
+
+    public TiledMap getMap(){
+        return map;
+    }
+    public World getWorld(){
+        return world;
     }
 
     public void update(float dt) {
@@ -88,6 +98,22 @@ public class Level1 extends ScreenAdapter {
     }
 
     @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+
+    @Override
     public void render(float delta){
         update(delta);
 
@@ -107,5 +133,14 @@ public class Level1 extends ScreenAdapter {
     @Override
     public void resize(int width, int height){
 
+    }
+
+    @Override
+    public void dispose() {
+        //dispose of all our opened resources
+        map.dispose();
+        renderer.dispose();
+        world.dispose();
+        b2dr.dispose();
     }
 }

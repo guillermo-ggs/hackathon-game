@@ -115,4 +115,5 @@ public class Akemi extends Sprite {
         else
             return State.STANDING;
     }
+
 }

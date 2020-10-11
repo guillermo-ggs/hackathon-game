@@ -24,7 +24,7 @@ public class Akemi extends Sprite {
     private Level1 level;
 
     public Akemi(World world, Level1 level){
-        super (new Texture("akemistand.png"));
+        super (level.getAtlas().findRegion("akemistand"));
         this.level = level;
         this.world = world;
         currentState = State.STANDING;
@@ -34,8 +34,8 @@ public class Akemi extends Sprite {
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
-        for(int i = 1; i < 4; i++)
-            frames.add(new TextureRegion(getTexture(), i* 16, 0, 16, 16));
+        for(int i = 0; i < 4; i++)
+            frames.add(new TextureRegion(getTexture(), i* 16, 8, 32, 86));
         akemiRun = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
 
@@ -43,7 +43,7 @@ public class Akemi extends Sprite {
             frames.add(new TextureRegion(getTexture(), i * 16, 0, 16, 16));
         akemiJump = new Animation <TextureRegion>(0.1f, frames);
 
-        akemiStand = new TextureRegion(getTexture(), 0, 8, 32, 86);
+        akemiStand = new TextureRegion(level.getAtlas().findRegion("akemistand"), 0, 8, 32, 86);
 
         defineAkemi();
         setBounds(0, 0, 32, 80);

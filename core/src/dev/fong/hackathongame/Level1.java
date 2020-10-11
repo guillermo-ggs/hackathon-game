@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -33,6 +34,7 @@ public class Level1 extends ScreenAdapter implements Screen {
     private Akemi player;
     private int jump_count = 0;
     public static final int MAX_JUMP_COUNT = 2;
+    public static Music levelMusic;
 
 
     public Level1(MainGame game) {
@@ -41,6 +43,12 @@ public class Level1 extends ScreenAdapter implements Screen {
         texture = new Texture("textures.png");
         gamecam = new OrthographicCamera();
         gamePort = new FitViewport(MainGame.V_Width, MainGame.V_Height, gamecam);
+
+        levelMusic = Gdx.audio.newMusic(Gdx.files.internal("level1music.mp3"));
+        levelMusic.setLooping(true);
+        levelMusic.setVolume(0.1f);
+        levelMusic.play();
+        MainGame.menuMusic.stop();
 
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("level1.tmx");
@@ -149,6 +157,8 @@ public class Level1 extends ScreenAdapter implements Screen {
         map.dispose();
         renderer.dispose();
         world.dispose();
+        levelMusic.dispose();
+        MainGame.menuMusic.dispose();
         //b2dr.dispose();
     }
 }

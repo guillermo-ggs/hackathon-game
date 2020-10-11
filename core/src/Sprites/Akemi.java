@@ -37,7 +37,8 @@ public class Akemi extends Sprite {
 
         for(int i = 0; i < 3; i++)
             frames.add(new TextureRegion(level.getAtlas().findRegion("akemirun1"), i* 32, 8, 32, 86));
-        akemiRun = new Animation<>(0.1f, frames);
+        frames.add(new TextureRegion(level.getAtlas().findRegion("akemirun2"), 0, 8, 32, 86));
+        akemiRun = new Animation<>(0.2f, frames);
         frames.clear();
 
         akemiJump = new TextureRegion(level.getAtlas().findRegion("akemijump"), 0, 8, 32, 86);
@@ -88,7 +89,7 @@ public class Akemi extends Sprite {
                 region = akemiJump;
                 break;
             case RUNNING:
-                region = (TextureRegion) akemiRun.getKeyFrame(stateTimer);
+                region = (TextureRegion) akemiRun.getKeyFrame(stateTimer, true);
                 break;
             case STANDING:
             default:

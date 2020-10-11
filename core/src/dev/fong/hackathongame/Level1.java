@@ -18,7 +18,6 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import org.graalvm.compiler.word.Word;
 
 public class Level1 extends ScreenAdapter {
     MainGame game;
@@ -48,12 +47,12 @@ public class Level1 extends ScreenAdapter {
 
         //gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
-       world = new World(new Vector2(0, -240), true);
-       b2dr = new Box2DDebugRenderer();
+        world = new World(new Vector2(0, -350), true);
+        b2dr = new Box2DDebugRenderer();
 
-       new B2WorldCreator(world, map);
+        new B2WorldCreator(world, map);
 
-       player = new Akemi(world, this);
+        player = new Akemi(world, this);
 
         world.setContactListener(new WorldContactListener());
         gamecam.setToOrtho(false, gamePort.getWorldWidth()/2, gamePort.getWorldHeight()/2);
@@ -61,7 +60,7 @@ public class Level1 extends ScreenAdapter {
     }
 
     public void handleInput(float dt) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W));
+        if (Gdx.input.isKeyPressed(Input.Keys.W));
             player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
         if (Gdx.input.isKeyPressed(Input.Keys.D) && player.b2body.getLinearVelocity().x <= 2);
             player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);

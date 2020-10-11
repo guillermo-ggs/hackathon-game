@@ -11,7 +11,9 @@ public class MainGame extends Game {
 	BitmapFont font;
 	public static final int V_Width = 1600;
 	public static final int V_Height = 900;
-	public static final int PPM = 100;
+	public static final int PPM = 10;
+	public static final int screenWidth = 1600;
+	public static final int screenHeight = 900;
 
 	@Override
 	public void create () {

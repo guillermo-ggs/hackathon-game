@@ -24,7 +24,7 @@ public class Akemi extends Sprite {
     private Level1 level;
 
     public Akemi(World world, Level1 level){
-        super (new Texture("akemi.png"));
+        super (new Texture("akemistand.png"));
         //super(level.getAtlas().findRegion("akemi"));//sprite map for akemi
         this.level = level;
         this.world = world;
@@ -44,10 +44,10 @@ public class Akemi extends Sprite {
             frames.add(new TextureRegion(getTexture(), i * 16, 0, 16, 16));
         akemiJump = new Animation <TextureRegion>(0.1f, frames);
 
-        akemiStand = new TextureRegion(getTexture(), 800, 475, 32, 64);
+        akemiStand = new TextureRegion(getTexture(), 0, 0, 32, 64);
 
         defineAkemi();
-        setBounds(800, 475, 32, 64);
+        setBounds(0, 0, 32, 64);
         setRegion(akemiStand);
     }
 
@@ -57,13 +57,13 @@ public class Akemi extends Sprite {
 
     public void defineAkemi(){
         BodyDef bdef = new BodyDef();
-        bdef.position.set(32, 32);
+        bdef.position.set(350, 370);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody (bdef);
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(10);
+        shape.setRadius(5);
 
         fdef.shape = shape;
         b2body.createFixture(fdef);

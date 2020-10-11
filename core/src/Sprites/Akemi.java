@@ -17,8 +17,9 @@ public class Akemi extends Sprite {
     public World world;
     public Body b2body;
     private TextureRegion akemiStand;
+    private TextureRegion akemiJump;
+    private TextureRegion akemiFall;
     private Animation<TextureRegion> akemiRun;
-    private Animation<TextureRegion> akemiJump;
     private float stateTimer;
     private boolean runningRight;
     private Level1 level;
@@ -32,26 +33,25 @@ public class Akemi extends Sprite {
         stateTimer = 0;
         runningRight = true;
 
-        Array<TextureRegion> frames = new Array<TextureRegion>();
+        Array<TextureRegion> frames = new Array<>();
 
-        for(int i = 0; i < 4; i++)
-            frames.add(new TextureRegion(getTexture(), i* 16, 8, 32, 86));
-        akemiRun = new Animation<TextureRegion>(0.1f, frames);
+        for(int i = 0; i < 3; i++)
+            frames.add(new TextureRegion(level.getAtlas().findRegion("akemirun1"), i* 32, 8, 32, 86));
+        akemiRun = new Animation<>(0.1f, frames);
         frames.clear();
 
-        for( int i = 4; i < 6; i++)
-            frames.add(new TextureRegion(getTexture(), i * 16, 0, 16, 16));
-        akemiJump = new Animation <TextureRegion>(0.1f, frames);
-
+        akemiJump = new TextureRegion(level.getAtlas().findRegion("akemijump"), 0, 8, 32, 86);
+        akemiFall = new TextureRegion(level.getAtlas().findRegion("akemifall"), 0, 8, 32, 86);
         akemiStand = new TextureRegion(level.getAtlas().findRegion("akemistand"), 0, 8, 32, 86);
 
         defineAkemi();
-        setBounds(0, 0, 32, 80);
+        setBounds(0, 0, 32, 86);
         setRegion(akemiStand);
     }
 
     public void update(float dt){
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+        setRegion(getFrame(dt));
     }
 
     public void defineAkemi(){
@@ -81,13 +81,15 @@ public class Akemi extends Sprite {
 
         TextureRegion region;
         switch (currentState){
+            case FALLING:
+                region = akemiFall;
+                break;
             case JUMPING:
-                region = (TextureRegion) akemiJump.getKeyFrame(stateTimer);
+                region = akemiJump;
                 break;
             case RUNNING:
                 region = (TextureRegion) akemiRun.getKeyFrame(stateTimer);
                 break;
-            case FALLING:
             case STANDING:
             default:
                 region = akemiStand;
@@ -106,7 +108,7 @@ public class Akemi extends Sprite {
         return region;
     }
     public State getState(){
-        if (b2body.getLinearVelocity().y > 0 || (b2body.getLinearVelocity().y < 0 && previousState == State.JUMPING))
+        if (b2body.getLinearVelocity().y > 0)
             return State.JUMPING;
         if (b2body.getLinearVelocity().y < 0)
             return State.FALLING;

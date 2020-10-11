@@ -44,10 +44,10 @@ public class Akemi extends Sprite {
             frames.add(new TextureRegion(getTexture(), i * 16, 0, 16, 16));
         akemiJump = new Animation <TextureRegion>(0.1f, frames);
 
-        akemiStand = new TextureRegion(getTexture(), 0, 0, 32, 64);
+        akemiStand = new TextureRegion(getTexture(), 0, 8, 32, 86);
 
         defineAkemi();
-        setBounds(0, 0, 32, 64);
+        setBounds(0, 0, 32, 80);
         setRegion(akemiStand);
     }
 
@@ -57,7 +57,7 @@ public class Akemi extends Sprite {
 
     public void defineAkemi(){
         BodyDef bdef = new BodyDef();
-        bdef.position.set(350, 370);
+        bdef.position.set(400, 370);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody (bdef);
 
